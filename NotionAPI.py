@@ -74,24 +74,37 @@ class NotionAPI:
         # Lọc danh sách theo filter_type
         if filter_type == "today":
             filtered_tasks = [task for task in self.pages if
-                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                                 '%Y-%m-%d') == today]
+                              "Deleted" in task["properties"]
+                              and task["properties"]["Deleted"]["status"].get("name") == "false" and
+                              "Date" in task["properties"]
+                              and task["properties"]["Date"]["date"].get("start")
+                              and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d')
+                              == today]
         elif filter_type == "week":
             end_of_week = today + timedelta(days=6 - today.weekday())
             filtered_tasks = [task for task in self.pages if
-                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                                 '%Y-%m-%d') >= start_of_week and datetime.strptime(
-                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_week]
+                              "Deleted" in task["properties"]
+                              and task["properties"]["Deleted"]["status"].get("name") == "false" and
+                              "Date" in task["properties"]
+                              and task["properties"]["Date"]["date"].get("start")
+                              and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d')
+                              >= start_of_week
+                              and datetime.strptime(
+                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d')
+                              <= end_of_week]
         elif filter_type == "month":
             end_of_month = today.replace(day=1, hour=23, minute=59, second=59) + timedelta(days=32)
             end_of_month = end_of_month.replace(day=1, hour=0, minute=0, second=0) - timedelta(days=1)
             filtered_tasks = [task for task in self.pages if
-                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                                 '%Y-%m-%d') >= start_month and datetime.strptime(
-                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_month]
+                              "Deleted" in task["properties"]
+                              and task["properties"]["Deleted"]["status"].get("name") == "false" and
+                              "Date" in task["properties"]
+                              and task["properties"]["Date"]["date"].get("start")
+                              and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d')
+                              >= start_month
+                              and datetime.strptime(
+                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d')
+                              <= end_of_month]
         else:
             return []  # Trả về danh sách rỗng nếu filter_type không hợp lệ
 
@@ -101,3 +114,4 @@ class NotionAPI:
                               reverse=True)
 
         return sorted_tasks
+        # return self.pages
