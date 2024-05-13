@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 from GoogleSheet import GoogleSheet
-from NotionAPI import NotionAPI, show_to_do_list
+from NotionAPI import NotionAPI, show_to_do_list, filter_todo_list
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -58,7 +58,8 @@ class TelegramBot:
         new_date = text.date + timedelta(hours=7)
         new_date_str = new_date.strftime("%d/%m/%Y %H:%M:%S")
 
-        self.notion_api.read_database()
+        # self.notion_api.read_to_do_list_database()
+        # self.notion_api.read_courses_database()
 
         # add new income
         if content.startswith("t ") and new_content:
@@ -105,13 +106,13 @@ class TelegramBot:
         # Notion API
         elif str(content) == "/d":
             # return show_to_do_list(self.notion_api.filter_todo_list("today"), "hôm nay")
-            return show_to_do_list(self.notion_api.pages, "hôm nay")
+            return show_to_do_list(filter_todo_list("today"), "hôm nay")
 
         elif str(content) == "/w":
-            return show_to_do_list(self.notion_api.filter_todo_list("week"), "tuần này")
+            return show_to_do_list(filter_todo_list("week"), "tuần này")
 
         elif str(content) == "/m":
-            return show_to_do_list(self.notion_api.filter_todo_list("month"), "tháng này")
+            return show_to_do_list(filter_todo_list("month"), "tháng này")
 
         return 'Nói gì bố m đéo hiểu!!!'
 
