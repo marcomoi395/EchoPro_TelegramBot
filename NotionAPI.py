@@ -63,28 +63,41 @@ class NotionAPI:
 
     # filter
     def filter_todo_list(self, filter_type):
+        # Xác định thứ tự ưu tiên
+        priority_order = {"Top": 3, "Medium": 2, "Low": 1}
+
+        # Lấy ngày hiện tại và đặt giờ về 00:00:00 để so sánh với các ngày trong dữ liệu
         today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         start_month = today.replace(day=1)
         start_of_week = today - timedelta(days=today.weekday())
+
+        # Lọc danh sách theo filter_type
         if filter_type == "today":
-            return [task for task in self.pages if
-                    "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                        "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                       '%Y-%m-%d') == today]
+            filtered_tasks = [task for task in self.pages if
+                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
+                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
+                                                                 '%Y-%m-%d') == today]
         elif filter_type == "week":
             end_of_week = today + timedelta(days=6 - today.weekday())
-            return [task for task in self.pages if
-                    "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                        "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                       '%Y-%m-%d') >= start_of_week and datetime.strptime(
-                        task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_week]
+            filtered_tasks = [task for task in self.pages if
+                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
+                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
+                                                                 '%Y-%m-%d') >= start_of_week and datetime.strptime(
+                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_week]
         elif filter_type == "month":
-            end_of_month = today.replace(day=1) + timedelta(days=32 - today.replace(day=1).day)
-            end_of_month = end_of_month.replace(day=1) - timedelta(days=1)
-            return [task for task in self.pages if
-                    "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
-                        "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
-                                                       '%Y-%m-%d') >= start_month and datetime.strptime(
-                        task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_month]
+            end_of_month = today.replace(day=1, hour=23, minute=59, second=59) + timedelta(days=32)
+            end_of_month = end_of_month.replace(day=1, hour=0, minute=0, second=0) - timedelta(days=1)
+            filtered_tasks = [task for task in self.pages if
+                              "Date" in task["properties"] and task["properties"]["Date"]["date"].get(
+                                  "start") and datetime.strptime(task["properties"]["Date"]["date"]["start"][:10],
+                                                                 '%Y-%m-%d') >= start_month and datetime.strptime(
+                                  task["properties"]["Date"]["date"]["start"][:10], '%Y-%m-%d') <= end_of_month]
         else:
-            return []
+            return []  # Trả về danh sách rỗng nếu filter_type không hợp lệ
+
+        # Sắp xếp danh sách theo mức ưu tiên
+        sorted_tasks = sorted(filtered_tasks,
+                              key=lambda x: priority_order.get(x["properties"]["Priority"]["select"]["name"], 0),
+                              reverse=True)
+
+        return sorted_tasks
