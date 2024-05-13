@@ -8,10 +8,10 @@ def show_to_do_list(data_after_filter, title):
     if not data_after_filter:
         return "Không có công việc hôm nay!!!"
     message = f" 📌 Danh sách công việc {title}:\n\n"
-    for task in data_after_filter:
+    for index, task in enumerate(data_after_filter):
         checkbox = task["properties"]["Checkbox"]["checkbox"]
         name = task["properties"]["Name"]["title"][0]["text"]["content"]
-        priority = task["properties"]["Priority"]["select"]["name"]
+        priority = task["properties"]["Priority"]["status"]["name"]
         start_time = task["properties"]["Date"]["date"]["start"]
         end_time = task["properties"]["Date"]["date"]["end"]
         description = task["properties"]["Description"]["rich_text"]
@@ -30,23 +30,23 @@ def show_to_do_list(data_after_filter, title):
             end_time = end_time.split("T")[1][:5]  # Lấy giờ và phút từ thời gian kết thúc
 
             if checkbox:
-                message += f"✅   Tên: {name}\n"
+                message += f"{index+1}. ✅   Tên: {name}\n"
             else:
-                message += f"❌   Tên: {name}\n"
-            message += f"         Mô tả: {description}\n"
-            message += f"         Thuộc khóa học: {name_course}\n"
-            message += f"         Mức ưu tiên: {priority}\n"
-            message += f"         Thời gian bắt đầu: {start_time}\n"
-            message += f"         Thời gian kết thúc: {end_time}\n\n"
+                message += f"{index+1}. ❌   Tên: {name}\n"
+            message += f"             Mô tả: {description}\n"
+            message += f"             Thuộc khóa học: {name_course}\n"
+            message += f"             Mức ưu tiên: {priority}\n"
+            message += f"             Thời gian bắt đầu: {start_time}\n"
+            message += f"             Thời gian kết thúc: {end_time}\n\n"
 
         else:
             if checkbox:
-                message += f"✅   Tên: {name}\n"
+                message += f"{index+1}. ✅   Tên: {name}\n"
             else:
-                message += f"❌   Tên: {name}\n"
-            message += f"         Mô tả: {description}\n"
-            message += f"         Thuộc khóa học: {name_course}\n"
-            message += f"         Mức ưu tiên: {priority}\n\n"
+                message += f"{index+1}. ❌   Tên: {name}\n"
+            message += f"             Mô tả: {description}\n"
+            message += f"             Thuộc khóa học: {name_course}\n"
+            message += f"             Mức ưu tiên: {priority}\n\n"
     return message
 
 
@@ -114,7 +114,7 @@ def filter_todo_list(filter_type):
 
     # Sắp xếp danh sách theo mức ưu tiên
     sorted_tasks = sorted(filtered_tasks,
-                          key=lambda x: priority_order.get(x["properties"]["Priority"]["select"]["name"], 0),
+                          key=lambda x: priority_order.get(x["properties"]["Priority"]["status"]["name"], 0),
                           reverse=True)
 
     # print(sorted_tasks)

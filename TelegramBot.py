@@ -54,7 +54,7 @@ class TelegramBot:
         new_content = re.match(r'(.+?)\s(\d+)\s*(.+)?', content)
 
         # Regex for timekeeping to record a specific date (ex: 23/02 s)
-        new_content_timekeeping = re.match(r'(\d{1,2}/\d{1,2})\s*([a-zA-Z]+)', content)
+        # new_content_timekeeping = re.match(r'(\d{1,2}/\d{1,2})\s*([a-zA-Z]+)', content)
         new_date = text.date + timedelta(hours=7)
         new_date_str = new_date.strftime("%d/%m/%Y %H:%M:%S")
 
