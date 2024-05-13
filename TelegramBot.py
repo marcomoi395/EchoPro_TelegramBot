@@ -1,7 +1,7 @@
 import re
-from datetime import timedelta, datetime
+from datetime import timedelta
 from typing import Final
-import gspread
+
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -65,12 +65,12 @@ class TelegramBot:
             return self.sheet.add_new_exponse(new_content, new_date_str)
 
         # Timekeeping on a certain date
-        elif new_content_timekeeping:
-            return self.sheet.add_new_timekeeping(new_content_timekeeping)
+        # elif new_content_timekeeping:
+        #     return self.sheet.add_new_timekeeping(new_content_timekeeping)
 
         # timekeepint during the day
-        elif content == 's' or content == 'c' or content == 'b':
-            return self.sheet.timekeeping_during_the_day(content, new_date_str)
+        # elif content == 's' or content == 'c' or content == 'b':
+        #     return self.sheet.timekeeping_during_the_day(content, new_date_str)
 
         # Get
         if content == "/c":
@@ -79,8 +79,8 @@ class TelegramBot:
         elif content == "/t":
             return self.sheet.get_one_month_statistics(content)
 
-        elif content == "/w":
-            return self.sheet.get_one_month_statistics(content)
+        # elif content == "/w":
+        #     return self.sheet.get_one_month_statistics(content)
 
         elif content.startswith("/c "):
             return self.sheet.get_one_month_statistics(content)
@@ -88,8 +88,8 @@ class TelegramBot:
         elif content.startswith("/t "):
             return self.sheet.get_one_month_statistics(content)
 
-        elif content.startswith("/w "):
-            return self.sheet.get_one_month_statistics(content)
+        # elif content.startswith("/w "):
+        #     return self.sheet.get_one_month_statistics(content)
 
         elif str(content) == "/help":
             return ("🔊 Danh sách các lệnh:\n\n<thông tin> <giá tiền> <ghi chú> - Thêm vào danh sách chi\nt <thông "

@@ -79,37 +79,37 @@ class GoogleSheet:
             return "🤡 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào {new_date_str} đã chi cho {infor_content} với giá là {amount} và được ghi chú như sau '{note}'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
 
     # timekeeping
-    def add_new_timekeeping(self, new_content_timekeeping, ):
-        date_timekeeping = new_content_timekeeping.group(1)
-        status = new_content_timekeeping.group(2)
-        current_year = datetime.now().year
-        date_timekeeping = date_timekeeping + "/" + str(current_year)
-        if status == 's':
-            self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '✔️'])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm vào buổi sáng'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
-        elif status == 'c':
-            self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '', '✔️'])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm vào buổi chiều'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
-        elif status == 'b':
-            self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '', '', '✔️'])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm cả ngày'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
-        # Get
-        else:
-            return "🤡 Thưa ngài!!!" + "\n\nVl thiệt chứ, cú pháp thế còn sai, thuaaaa" + "\n\n <ngày/tháng> <s, c, b>" + "\nTrong đó: s là sáng, c là chiều và b là cả ngày" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    # def add_new_timekeeping(self, new_content_timekeeping, ):
+    #     date_timekeeping = new_content_timekeeping.group(1)
+    #     status = new_content_timekeeping.group(2)
+    #     current_year = datetime.now().year
+    #     date_timekeeping = date_timekeeping + "/" + str(current_year)
+    #     if status == 's':
+    #         self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '✔️'])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm vào buổi sáng'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    #     elif status == 'c':
+    #         self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '', '✔️'])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm vào buổi chiều'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    #     elif status == 'b':
+    #         self.spreadsheet.get_worksheet(2).append_row([date_timekeeping, '', '', '✔️'])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {date_timekeeping} ngài đã đi làm cả ngày'" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    #     # Get
+    #     else:
+    #         return "🤡 Thưa ngài!!!" + "\n\nVl thiệt chứ, cú pháp thế còn sai, thuaaaa" + "\n\n <ngày/tháng> <s, c, b>" + "\nTrong đó: s là sáng, c là chiều và b là cả ngày" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
 
     # timekeeping during the day
-    def timekeeping_during_the_day(self, content, new_date_str):
-        if content == 's':
-            self.spreadsheet.get_worksheet(2).append_row([new_date_str, "✔️"])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm vào buổi sáng" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
-
-        elif content == 'c':
-            self.spreadsheet.get_worksheet(2).append_row([new_date_str, "", "✔️"])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm vào buổi chiều" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
-
-        elif content == 'b':
-            self.spreadsheet.get_worksheet(2).append_row([new_date_str, "", "", "✔️"])
-            return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm cả ngày" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    # def timekeeping_during_the_day(self, content, new_date_str):
+    #     if content == 's':
+    #         self.spreadsheet.get_worksheet(2).append_row([new_date_str, "✔️"])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm vào buổi sáng" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    #
+    #     elif content == 'c':
+    #         self.spreadsheet.get_worksheet(2).append_row([new_date_str, "", "✔️"])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm vào buổi chiều" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
+    #
+    #     elif content == 'b':
+    #         self.spreadsheet.get_worksheet(2).append_row([new_date_str, "", "", "✔️"])
+    #         return "📌 Thưa ngài!!!" + "\n\nDữ liệu đã được ghi lại như sau:" + f"\nVào ngày {new_date_str[0:10]} ngài đã đi làm cả ngày" + "\n\nChúc ngài một ngày tốt lành 🍀🍀🍀🍀🍀🍀🍀🍀"
 
     # get one month statistics
     def get_one_month_statistics(self, content):
@@ -119,8 +119,8 @@ class GoogleSheet:
         elif content == "/t":
             return total_price_income_this_month(self.get_data(1), datetime.now().month)
 
-        elif content == "/w":
-            return count_number_working_days_this_month(self.get_data(2), datetime.now().month)
+        # elif content == "/w":
+        #     return count_number_working_days_this_month(self.get_data(2), datetime.now().month)
 
         elif content.startswith("/c "):
             return total_price_income_this_month(self.get_data(0), content[3:4])
@@ -128,5 +128,5 @@ class GoogleSheet:
         elif content.startswith("/t "):
             return total_price_income_this_month(self.get_data(1), content[3:4])
 
-        elif content.startswith("/w "):
-            return count_number_working_days_this_month(self.get_data(2), content[3:4])
+        # elif content.startswith("/w "):
+        #     return count_number_working_days_this_month(self.get_data(2), content[3:4])
