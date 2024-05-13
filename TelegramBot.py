@@ -6,6 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 from GoogleSheet import GoogleSheet
+from NotionAPI import NotionAPI, show_to_do_list
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -17,10 +18,11 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 class TelegramBot:
-    def __init__(self, token: str, bot_username: str, sheet: GoogleSheet):
+    def __init__(self, token: str, bot_username: str, sheet: GoogleSheet, notion_api: NotionAPI):
         self.TOKEN: Final = token
         self.BOT_USERNAME: Final = bot_username
         self.sheet = sheet
+        self.notion_api = notion_api
         # self.gs = gspread.service_account(gs_credentials)
         # self.idSheet = idSheet
         self.app = Application.builder().token(self.TOKEN).build()
@@ -55,6 +57,8 @@ class TelegramBot:
         new_content_timekeeping = re.match(r'(\d{1,2}/\d{1,2})\s*([a-zA-Z]+)', content)
         new_date = text.date + timedelta(hours=7)
         new_date_str = new_date.strftime("%d/%m/%Y %H:%M:%S")
+
+        self.notion_api.read_database()
 
         # add new income
         if content.startswith("t ") and new_content:
@@ -97,6 +101,17 @@ class TelegramBot:
                     "chi tháng truy vấn\n/t - Tổng thu tháng này\n/c <tháng> - Tổng thu tháng truy vấn\ns - Chấm công "
                     "buổi sáng\nc - Chấm công buổi chiều\nb - Chấm công cả ngày\n<ngày/tháng> <s, c, b> - chấm công "
                     "theo ngày\n/w - Thống kê đi làm tháng này\n/w <tháng> - Thống kê đi làm theo tháng truy vấn")
+
+        # Notion API
+        elif str(content) == "/d":
+            # return show_to_do_list(self.notion_api.filter_todo_list("today"), "hôm nay")
+            return show_to_do_list(self.notion_api.pages, "hôm nay")
+
+        elif str(content) == "/w":
+            return show_to_do_list(self.notion_api.filter_todo_list("week"), "tuần này")
+
+        elif str(content) == "/m":
+            return show_to_do_list(self.notion_api.filter_todo_list("month"), "tháng này")
 
         return 'Nói gì bố m đéo hiểu!!!'
 

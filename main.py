@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from GoogleSheet import GoogleSheet
+from NotionAPI import NotionAPI
 from TelegramBot import TelegramBot
 
 if __name__ == '__main__':
@@ -14,11 +15,18 @@ if __name__ == '__main__':
         gs_credentials="credentials.json",
         idSheet=os.getenv("sheet")
     )
+
+    notion_api = NotionAPI(
+        token=os.getenv("notion_token"),
+        database_id=os.getenv("database_id")
+    )
+
     bot = TelegramBot(
         token=os.getenv("token"),
         bot_username=os.getenv("bot_username"),
-        sheet=sheet
+        sheet=sheet,
+        notion_api=notion_api
     )
     bot.run()
     os.remove(file_path)
-
+    os.remove("db.json")
