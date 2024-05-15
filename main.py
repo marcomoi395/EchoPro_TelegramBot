@@ -2,29 +2,30 @@ import asyncio
 import logging
 import os
 import sys
+
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
 from API.NotionAPI import NotionAPI
-from handlers import questions, different_types
+from handlers import questions
 
 
 async def main():
     load_dotenv()
-
-    # create credentials.json for googlesheet
-    gs_credentials = os.getenv("gs_credentials")
-    file_path = "credentials.json"
-    with open(file_path, "w") as file:
-        file.write(gs_credentials)
-
-    bot = Bot(token="6961709005:AAG-OPYRAe3VSblLmJVbB1X6C6GhUUMqkbk",
+    token = os.getenv("token")
+    bot = Bot(token=token,
               default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
 
-    dp.include_routers(questions.router, different_types.router)
+    dp.include_routers(questions.router)
+
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    load_dotenv()
 
     # Connect with Notion
     notion_api = NotionAPI(
@@ -37,13 +38,12 @@ async def main():
     notion_api.read_courses_database()
     notion_api.read_to_do_list_database()
 
-    # await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
-
-
-if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
         pass
+
+    os.remove("credentials.json")
+    os.remove("courses_database.json")
+    os.remove("to_do_list_database.json")

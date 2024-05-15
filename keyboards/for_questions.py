@@ -7,8 +7,8 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 def get_yes_no_kb() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardBuilder()
-    kb.button(text="1")
-    kb.button(text="2")
+    kb.button(text="Đúng")
+    kb.button(text="Sai")
     kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)
 
@@ -49,6 +49,18 @@ def statistical_for_another_month_keyboard(month) -> InlineKeyboardMarkup:
             types.InlineKeyboardButton(text="Tổng chi", callback_data=f"callback_expense {month}"),
             types.InlineKeyboardButton(text="Tổng thu", callback_data=f"callback_income {month}"),
             types.InlineKeyboardButton(text="Bảng chấm công", callback_data=f"callback_timekeeping {month}")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
+def undo_keyboard() -> InlineKeyboardMarkup:
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Chi", callback_data="callback_undo expense"),
+            types.InlineKeyboardButton(text="Thu", callback_data="callback_undo income"),
+            types.InlineKeyboardButton(text="Chấm công", callback_data="callback_undo timekeeping")
         ]
     ]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
