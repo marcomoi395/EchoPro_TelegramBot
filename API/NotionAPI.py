@@ -23,7 +23,7 @@ def show_to_do_list(data_after_filter, title):
             description = []
         if course:
             name_course = get_name_course_by_id(course[0]["id"])
-            print(name_course)
+            # print(name_course)
 
         if start_time and end_time:
             start_time = start_time.split("T")[1][:5]  # Lấy giờ và phút từ thời gian bắt đầu

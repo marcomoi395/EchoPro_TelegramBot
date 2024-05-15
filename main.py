@@ -11,7 +11,6 @@ from API.NotionAPI import NotionAPI
 from handlers import questions, different_types
 
 
-# Запуск бота
 async def main():
     load_dotenv()
 
@@ -48,4 +47,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         pass
-
