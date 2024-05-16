@@ -4,6 +4,8 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+from API.NotionAPI import NotionAPI, filter_todo_list
+
 
 def get_yes_no_kb() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardBuilder()
@@ -85,4 +87,29 @@ def show_list_month() -> InlineKeyboardMarkup:
     for i in range(1, cur_month + 1):
         builder.button(text=f"Tháng {i}", callback_data=f"Tháng {i}")
     builder.adjust(cur_month)
+    return builder.as_markup()
+
+
+# delete_keyboard
+def delete_keyboard() -> InlineKeyboardMarkup:
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Hôm nay", callback_data="delete today"),
+            types.InlineKeyboardButton(text="Tuần này", callback_data="delete week"),
+            types.InlineKeyboardButton(text="Tháng này", callback_data="delete month")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
+def show_todo_list_to_delete(filter_type) -> InlineKeyboardMarkup:
+    pages = filter_todo_list(filter_type)
+    builder = InlineKeyboardBuilder()
+    for page in pages:
+        if page:
+            name = page["properties"]["Name"]["title"][0]["text"]["content"]
+            record_id = page["id"]
+            builder.button(text=f"{name}", callback_data=f"delete_with_id {record_id}")
+    builder.adjust(1)
     return builder.as_markup()

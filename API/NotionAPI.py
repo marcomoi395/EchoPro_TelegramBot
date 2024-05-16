@@ -30,9 +30,9 @@ def show_to_do_list(data_after_filter, title):
             end_time = end_time.split("T")[1][:5]  # Lấy giờ và phút từ thời gian kết thúc
 
             if checkbox:
-                message += f"{index+1}. ✅   Tên: {name}\n"
+                message += f"{index + 1}. ✅   Tên: {name}\n"
             else:
-                message += f"{index+1}. ❌   Tên: {name}\n"
+                message += f"{index + 1}. ❌   Tên: {name}\n"
             message += f"             Mô tả: {description}\n"
             message += f"             Thuộc khóa học: {name_course}\n"
             message += f"             Mức ưu tiên: {priority}\n"
@@ -41,9 +41,9 @@ def show_to_do_list(data_after_filter, title):
 
         else:
             if checkbox:
-                message += f"{index+1}. ✅   Tên: {name}\n"
+                message += f"{index + 1}. ✅   Tên: {name}\n"
             else:
-                message += f"{index+1}. ❌   Tên: {name}\n"
+                message += f"{index + 1}. ❌   Tên: {name}\n"
             message += f"             Mô tả: {description}\n"
             message += f"             Thuộc khóa học: {name_course}\n"
             message += f"             Mức ưu tiên: {priority}\n\n"
@@ -122,6 +122,14 @@ def filter_todo_list(filter_type):
     # return self.pages
 
 
+def get_name_by_id(record_id):
+    pages = read_json("to_do_list_database.json")
+    for page in pages:
+        if page["id"] == record_id:
+            return page["properties"]["Name"]["title"][0]["text"]["content"]
+    return ""
+
+
 class NotionAPI:
     def __init__(self, token, to_do_list_database_id, courses_database_id):
         self.token = token
@@ -152,3 +160,20 @@ class NotionAPI:
         with open("courses_database.json", 'w', encoding='utf8') as f:
             json.dump(data, f, ensure_ascii=False)
 
+    def update_database(self, record_id):
+        read_url = f"https://api.notion.com/v1/pages/{record_id}"
+        update_data = {
+            "properties": {
+                "Deleted": {
+                    "id": "zT%5B%7C",
+                    "type": "status",
+                    "status": {
+                        "id": "^Ep]",
+                        "name": "true",
+                        "color": "green"
+                    }
+                }
+            }
+        }
+        requests.patch(read_url, json=update_data, headers=self.headers)
+        # return "Đã xóa thành công"
